@@ -13,7 +13,7 @@ $configs = [
         'port' => '5432', 
         'dbname' => 'site',
         'user' => 'postgres',
-        'password' => 'твой_пароль',
+        'password' => '1234',
         'desc' => 'Основные настройки'
     ],
     [
@@ -21,7 +21,7 @@ $configs = [
         'port' => '5432',
         'dbname' => 'site', 
         'user' => 'postgres',
-        'password' => 'твой_пароль',
+        'password' => '1234',
         'desc' => 'Через IP 127.0.0.1'
     ]
 ];
