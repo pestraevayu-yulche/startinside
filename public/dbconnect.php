@@ -9,8 +9,13 @@ $password = '6wZ3kGtouLWSjavFKCzDPD3eymxObMuX';
 try {
     $pdo = new PDO("pgsql:host=$host;port=$port;dbname=$dbname", $user, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    echo "✅ Подключено к Render PostgreSQL!";
+    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    
+    
 } catch (PDOException $e) {
-    die('Ошибка подключения: ' . $e->getMessage());
+    error_log('Database connection error: ' . $e->getMessage());
+    if (session_status() === PHP_SESSION_ACTIVE) {
+        $_SESSION['error'] = 'Database connection failed';
+    }
 }
 ?>
