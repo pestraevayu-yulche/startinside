@@ -1,5 +1,5 @@
 <?php
-include('tpl/header.php');
+include(__DIR__ . '/tpl/header.php');
 
 // Подключаем базу данных
 include("dbconnect.php");
@@ -11,7 +11,7 @@ include("dbconnect.php");
     </div>
     
     <?php
-    include('tpl/nav.php');
+    include(__DIR__ . '/tpl/nav.php');
     ?>
     
     <!-- Секция направления -->
@@ -147,5 +147,6 @@ include("dbconnect.php");
     </script>
 
 <?php
-include('tpl/footer.php');
+include(__DIR__ . '/tpl/footer.php');
+
 ?>
