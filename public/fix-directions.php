@@ -54,6 +54,13 @@ INSERT INTO directions (name, description, skills, career_paths, icon) VALUES
     'Swift/Kotlin, React Native/Flutter, REST API, Mobile UI/UX, App Store/Google Play',
     'Junior Mobile → Middle Mobile → Senior Mobile → Mobile Team Lead',
     'mobile'
+)
+(
+    'QA-инженер',
+    'Специалист по обеспечению качества программного обеспечения через тестирование и автоматизацию.',
+    'Manual Testing, Automated Testing, Selenium/Cypress, Test Cases, Bug Tracking, SQL, API Testing',
+    'Junior QA → Middle QA → Senior QA → QA Lead → QA Manager',
+    'qa'
 );
 ";
 
