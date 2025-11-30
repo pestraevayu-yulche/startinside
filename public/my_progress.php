@@ -92,7 +92,7 @@ function getOverallLevel($total_score) {
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <?php include('tpl/header.php'); ?>
+    <?php include(__DIR__ . '/tpl/header.php'); ?>
     
     <!-- Фоновая картинка -->
     <div class="background-container">
@@ -100,7 +100,7 @@ function getOverallLevel($total_score) {
         <div class="overlay"></div>
     </div>
     
-    <?php include('tpl/nav.php'); ?>
+    <?php include(__DIR__ . '/tpl/nav.php'); ?>
 
     <div class="hero-section progress-page">
     <div class="progress-page-container">
@@ -336,4 +336,5 @@ function getOverallLevel($total_score) {
     </div> <!-- Закрытие container -->
 </div> <!-- Закрытие hero-section -->
 
-<?php include('tpl/footer.php'); ?>
+
+<?php include(__DIR__ . '/tpl/footer.php'); ?>
