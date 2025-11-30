@@ -1,5 +1,5 @@
 <?php
-include(__DIR__ . '/tpl/header.php');
+include('tpl/header.php');
 ?>
     <!-- Фоновая картинка -->
     <div class="background-container">
@@ -8,7 +8,7 @@ include(__DIR__ . '/tpl/header.php');
     </div>
     
     <?php
-    include(__DIR__ . '/tpl/nav.php');
+    include('tpl/nav.php');
     ?>
 
     <!-- Основной контент -->
@@ -131,6 +131,7 @@ include(__DIR__ . '/tpl/header.php');
 
 
 <?php
-include(__DIR__ . '/tpl/footer.php');
+include('tpl/footer.php');
 
 ?>
+
