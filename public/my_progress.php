@@ -30,7 +30,7 @@ try {
     $profile_data = [];
 }
 
-// Получаем результаты Soft Skills тестов
+// Получаем результаты Soft Skills тестов из новой таблицы
 try {
     $stmt = $pdo->prepare("SELECT * FROM soft_skills_detailed_results WHERE user_id = :user_id ORDER BY test_date DESC LIMIT 5");
     $stmt->bindParam(':user_id', $user_id);
@@ -344,5 +344,6 @@ if ($total_tests > 0) {
 
 
 <?php include(__DIR__ . '/tpl/footer.php'); ?>
+
 
 
