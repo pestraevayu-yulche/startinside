@@ -144,7 +144,7 @@ include(__DIR__ . '/tpl/header.php');
     </div>
 
     <!-- Подключаем React компонент -->
-    <script type="text/babel" src="js/directions-my.js"></script>
+    <script type="text/babel" src="/js/directions-my.js"></script>
     
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -232,3 +232,4 @@ include(__DIR__ . '/tpl/header.php');
 include(__DIR__ . '/tpl/footer.php');
 
 ?>
+
