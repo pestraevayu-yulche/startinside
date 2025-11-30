@@ -156,7 +156,7 @@ $first_letter = strtoupper(mb_substr($user_name, 0, 1));
 ?>
 
 <?php
-include('tpl/header.php');
+include(__DIR__ . '/tpl/header.php');
 ?>
     <!-- Фоновая картинка -->
     <div class="background-container">
@@ -165,7 +165,7 @@ include('tpl/header.php');
     </div>
     
     <?php
-    include('tpl/nav.php');
+    include(__DIR__ . '/tpl/nav.php');
     ?>
 
 <div class="hero-section">
@@ -343,5 +343,6 @@ include('tpl/header.php');
     </script>
 
 <?php
-include('tpl/footer.php');
+include(__DIR__ . '/tpl/footer.php');
+
 ?>
