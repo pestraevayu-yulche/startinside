@@ -32,7 +32,7 @@ try {
 
 // Получаем результаты Soft Skills тестов
 try {
-    $stmt = $pdo->prepare("SELECT * FROM softskills_results WHERE user_id = :user_id ORDER BY test_date DESC LIMIT 5");
+    $stmt = $pdo->prepare("SELECT * FROM soft_skills_detailed_results WHERE user_id = :user_id ORDER BY test_date DESC LIMIT 5");
     $stmt->bindParam(':user_id', $user_id);
     $stmt->execute();
     $softskills_results = $stmt->fetchAll();
@@ -344,4 +344,5 @@ if ($total_tests > 0) {
 
 
 <?php include(__DIR__ . '/tpl/footer.php'); ?>
+
 
