@@ -79,8 +79,8 @@ if ($total_tests > 0) {
     $total_max_score = 0;
     
     foreach ($softskills_results as $test) {
-        $total_score += $test['overall_score'];
-        $total_max_score += 100;
+    $total_score += $test['total_score'];
+    $total_max_score += 80; // максимальный балл за Soft Skills тест
     }
     
     foreach ($technical_results as $test) {
@@ -151,7 +151,7 @@ if ($total_tests > 0) {
             <div class="progress-section-card">
                 <h3 class="section-title-progress">История тестирования</h3>
                 
-                <!-- Soft Skills результаты -->
+<!-- Soft Skills результаты -->
 <?php if (!empty($softskills_results)): ?>
     <h4>Soft Skills тесты</h4>
     <?php foreach($softskills_results as $test): ?>
@@ -192,7 +192,6 @@ if ($total_tests > 0) {
         </div>
     <?php endforeach; ?>
 <?php endif; ?>
-
                 <!-- Технические тесты -->
                 <?php if (!empty($technical_results)): ?>
                     <h4>Технические тесты</h4>
@@ -355,6 +354,7 @@ if ($total_tests > 0) {
 
 
 <?php include(__DIR__ . '/tpl/footer.php'); ?>
+
 
 
 
