@@ -152,35 +152,46 @@ if ($total_tests > 0) {
                 <h3 class="section-title-progress">История тестирования</h3>
                 
                 <!-- Soft Skills результаты -->
-                <?php if (!empty($softskills_results)): ?>
-                    <h4>Soft Skills тесты</h4>
-                    <?php foreach($softskills_results as $test): ?>
-                        <div class="test-item">
-                            <div class="test-header">
-                                <h5>Soft Skills Assessment</h5>
-                                <span class="test-date">
-                                    <?php echo date('d.m.Y H:i', strtotime($test['test_date'])); ?>
-                                </span>
-                            </div>
-                            <div class="test-result">
-                                <div class="score">
-                                    <span class="score-value"><?php echo $test['overall_score']; ?>%</span>
-                                    <span class="score-label">общий балл</span>
-                                </div>
-                                <div class="progress-bar">
-                                    <div class="progress-fill" style="width: <?php echo $test['overall_score']; ?>%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-breakdown">
-                                <div class="skill-score">Коммуникация: <?php echo $test['communication_score']; ?>%</div>
-                                <div class="skill-score">Работа в команде: <?php echo $test['teamwork_score']; ?>%</div>
-                                <div class="skill-score">Лидерство: <?php echo $test['leadership_score']; ?>%</div>
-                                <div class="skill-score">Адаптивность: <?php echo $test['adaptability_score']; ?>%</div>
-                                <div class="skill-score">Тайм-менеджмент: <?php echo $test['time_management_score']; ?>%</div>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                <?php endif; ?>
+<?php if (!empty($softskills_results)): ?>
+    <h4>Soft Skills тесты</h4>
+    <?php foreach($softskills_results as $test): ?>
+        <div class="test-item">
+            <div class="test-header">
+                <h5>Soft Skills Assessment</h5>
+                <span class="test-date">
+                    <?php echo date('d.m.Y H:i', strtotime($test['test_date'])); ?>
+                </span>
+            </div>
+            <div class="test-result">
+                <div class="score">
+                    <span class="score-value"><?php echo $test['total_score']; ?>/80</span>
+                    <span class="score-label">общий балл</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: <?php echo ($test['total_score'] / 80) * 100; ?>%"></div>
+                </div>
+            </div>
+            <div class="skill-breakdown">
+                <div class="skill-score">Коммуникация: <?php echo $test['communication_skills']; ?>/5</div>
+                <div class="skill-score">Активное слушание: <?php echo $test['active_listening']; ?>/5</div>
+                <div class="skill-score">Командная работа: <?php echo $test['teamwork']; ?>/5</div>
+                <div class="skill-score">Коллаборация: <?php echo $test['collaboration']; ?>/5</div>
+                <div class="skill-score">Решение проблем: <?php echo $test['problem_solving']; ?>/5</div>
+                <div class="skill-score">Принятие решений: <?php echo $test['decision_making']; ?>/5</div>
+                <div class="skill-score">Адаптивность: <?php echo $test['adaptability']; ?>/5</div>
+                <div class="skill-score">Обучаемость: <?php echo $test['learning_agility']; ?>/5</div>
+                <div class="skill-score">Лидерство: <?php echo $test['leadership']; ?>/5</div>
+                <div class="skill-score">Обратная связь: <?php echo $test['feedback_skills']; ?>/5</div>
+                <div class="skill-score">Тайм-менеджмент: <?php echo $test['time_management']; ?>/5</div>
+                <div class="skill-score">Стратегическое мышление: <?php echo $test['strategic_thinking']; ?>/5</div>
+                <div class="skill-score">Креативность: <?php echo $test['creativity']; ?>/5</div>
+                <div class="skill-score">Решение конфликтов: <?php echo $test['conflict_resolution']; ?>/5</div>
+                <div class="skill-score">Эмоциональный интеллект: <?php echo $test['emotional_intelligence']; ?>/5</div>
+                <div class="skill-score">Управление стрессом: <?php echo $test['stress_management']; ?>/5</div>
+            </div>
+        </div>
+    <?php endforeach; ?>
+<?php endif; ?>
 
                 <!-- Технические тесты -->
                 <?php if (!empty($technical_results)): ?>
@@ -344,6 +355,7 @@ if ($total_tests > 0) {
 
 
 <?php include(__DIR__ . '/tpl/footer.php'); ?>
+
 
 
 
