@@ -211,7 +211,7 @@ function getOverallLevel($total_score) {
                         <a href="soft_skills_test.php" class="btn-progress">Пройти тестирование</a>
                     </div>
                 <?php endif; ?>
-            </div>
+            
                     </div>
                     <!-- Блок технических тестов -->
                      <div class="progress-card">
@@ -328,7 +328,7 @@ function getOverallLevel($total_score) {
                             <p class="small text-muted">В ближайшем обновлении вы сможете ставить цели и отслеживать их выполнение</p>
                         </div>
                     </div>
-                    
+                    </div>
                 </div> <!-- Закрытие auth-card -->
             </div> <!-- Закрытие col-12 col-lg-10 col-xl-9 -->
         </div> <!-- Закрытие row justify-content-center -->
@@ -337,6 +337,7 @@ function getOverallLevel($total_score) {
 
 
 <?php include(__DIR__ . '/tpl/footer.php'); ?>
+
 
 
 
