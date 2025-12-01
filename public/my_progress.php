@@ -363,7 +363,7 @@ function getOverallLevel($total_score) {
             }
             
             // Конкретные шаги
-            echo "<li class='mb-3 mt-3'><strong>📅 Конкретные шаги на ближайший месяц:</strong><br>";
+            echo "<li class='mb-3 mt-3'><strong>Конкретные шаги на ближайший месяц:</strong><br>";
             
             $monthly_steps = [];
             if (count($weak_skills) > 0) {
@@ -387,7 +387,7 @@ function getOverallLevel($total_score) {
             ?>
         </ul>
     </div>
-<?php endif; ?>
+<?php endif; ?> </div>
                                 
                                 <div class="col-md-6">
     <h5>Общие рекомендации:</h5>
@@ -448,6 +448,7 @@ function getOverallLevel($total_score) {
 
 
 <?php include(__DIR__ . '/tpl/footer.php'); ?>
+
 
 
 
