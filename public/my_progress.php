@@ -104,7 +104,7 @@ function getOverallLevel($total_score) {
     <div class="hero-section progress-page">
     <div class="progress-page-container">
         <div class="progress-main-card">
-            <h2 class="text-center mb-4">Мой прогресс</h2>
+            <h2 class="section-title">Мой прогресс</h2>
             
             <!-- Статистика -->
             <div class="stats-grid-progress mb-5">
@@ -214,8 +214,8 @@ function getOverallLevel($total_score) {
             
                     </div>
                     <!-- Блок технических тестов -->
-                     <div class="progress-card">
-                            <h3 class="section-title">Результаты технических тестов</h3>
+                     <div class="total-score-progress">
+                            <h3 class="section-title-progress">Результаты технических тестов</h3>
                             
                             <?php if (!empty($technical_results)): ?>
                                 <div class="row">
@@ -255,8 +255,8 @@ function getOverallLevel($total_score) {
                             <?php endif; ?>
                         </div>
 
-                        <div class="progress-card">
-                        <h3 class="section-title">Рекомендации по развитию</h3>
+                        <div class="total-score-progress">
+                        <h3 class="section-title-progress">Рекомендации по развитию</h3>
                         
                         <?php if (!empty($detailed_soft_skills) || !empty($technical_results)): ?>
                             <div class="row">
@@ -321,8 +321,8 @@ function getOverallLevel($total_score) {
                     </div>
 
                     <!-- Блок целей -->
-                    <div class="progress-card">
-                        <h3 class="section-title">Мои цели</h3>
+                    <div class="total-score-progress">
+                        <h3 class="section-title-progress">Мои цели</h3>
                         <div class="empty-state">
                             <p>Функция постановки целей скоро будет доступна</p>
                             <p class="small text-muted">В ближайшем обновлении вы сможете ставить цели и отслеживать их выполнение</p>
@@ -337,6 +337,7 @@ function getOverallLevel($total_score) {
 
 
 <?php include(__DIR__ . '/tpl/footer.php'); ?>
+
 
 
 
