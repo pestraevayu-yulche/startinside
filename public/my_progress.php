@@ -259,134 +259,108 @@ function getOverallLevel($total_score) {
                         <h3 class="section-title-progress">Рекомендации по развитию</h3>
                         
                         <?php if (!empty($detailed_soft_skills)): ?>
-    <div class="col-md-6">
-        <h5>Персональные рекомендации по Soft Skills:</h5>
-        <ul class="list-unstyled">
+    <div class="profile-section">
+                <span class="profile-label">Сильные стороны:</span>
+                <span class="profile-value strong-skills">
+                    <?php echo implode(', ', array_keys(array_slice($strong_skills, 0, 3))); ?>
+                </span>
+            </div>
+            <?php endif; ?>
+            
+            <?php if (!empty($weak_skills)): ?>
+            <div class="profile-section">
+                <span class="profile-label">Зоны роста:</span>
+                <span class="profile-value weak-skills">
+                    <?php echo implode(', ', array_keys(array_slice($weak_skills, 0, 3))); ?>
+                </span>
+            </div>
+            <?php endif; ?>
+        </div>
+    </div>
+    
+    <!-- Карточка персональных рекомендаций -->
+    <div class="recommendation-card">
+        <div class="recommendation-header">
+            <div class="recommendation-icon">🎯</div>
+            <h3 class="recommendation-title">Персональные рекомендации</h3>
+        </div>
+        
+        <ul class="recommendation-list">
+            <?php foreach (array_slice($specific_recommendations, 0, 5) as $index => $rec): ?>
+            <li class="recommendation-item">
+                <div class="recommendation-badge"><?php echo $index + 1; ?></div>
+                <div class="recommendation-content">
+                    <?php echo $rec; ?>
+                </div>
+            </li>
+            <?php endforeach; ?>
+        </ul>
+        
+        <div class="steps-container">
+            <div class="steps-title">План действий на месяц</div>
+            <ul class="steps-list">
+                <?php foreach ($monthly_steps as $index => $step): ?>
+                <li class="step-item">
+                    <div class="step-number"><?php echo $index + 1; ?></div>
+                    <p class="step-text"><?php echo $step; ?></p>
+                </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Карточка общего развития -->
+    <div class="recommendation-card">
+        <div class="recommendation-header">
+            <div class="recommendation-icon">📊</div>
+            <h3 class="recommendation-title">Общее развитие</h3>
+        </div>
+        
+        <div class="level-indicator <?php 
+            echo $total_score >= 60 ? 'level-advanced' : 
+                 ($total_score >= 40 ? 'level-intermediate' : 'level-beginner'); 
+        ?>">
+            <span>Уровень: </span>
+            <span><?php 
+                echo $total_score >= 60 ? 'Продвинутый' : 
+                     ($total_score >= 40 ? 'Средний' : 'Начинающий'); 
+            ?></span>
+        </div>
+        
+        <ul class="recommendation-list">
             <?php
-            // Анализ сильных и слабых сторон
-            $strong_skills = [];
-            $weak_skills = [];
-            
-            $skills_data = [
-                'communication_skills' => 'Коммуникативные навыки',
-                'active_listening' => 'Активное слушание',
-                'teamwork' => 'Командная работа',
-                'collaboration' => 'Коллаборация',
-                'problem_solving' => 'Решение проблем',
-                'decision_making' => 'Принятие решений',
-                'adaptability' => 'Адаптивность',
-                'learning_agility' => 'Обучаемость',
-                'leadership' => 'Лидерство',
-                'feedback_skills' => 'Обратная связь',
-                'time_management' => 'Тайм-менеджмент',
-                'strategic_thinking' => 'Стратегическое мышление',
-                'creativity' => 'Креативность',
-                'conflict_resolution' => 'Решение конфликтов',
-                'emotional_intelligence' => 'Эмоциональный интеллект',
-                'stress_management' => 'Управление стрессом'
-            ];
-            
-            foreach ($skills_data as $skill_key => $skill_name) {
-                $score = $detailed_soft_skills[$skill_key];
-                if ($score >= 4) {
-                    $strong_skills[$skill_name] = $score;
-                } elseif ($score <= 2) {
-                    $weak_skills[$skill_name] = $score;
-                }
+            if ($total_score >= 60) {
+                echo '<li class="recommendation-item"><div class="recommendation-badge">★</div><div class="recommendation-content"><span class="skill-category">Стратегия:</span> Фокус на менторинге и развитии личного бренда</div></li>';
+                echo '<li class="recommendation-item"><div class="recommendation-badge">★</div><div class="recommendation-content"><span class="skill-category">Экспертиза:</span> Участие в конференциях как спикер</div></li>';
+            } elseif ($total_score >= 40) {
+                echo '<li class="recommendation-item"><div class="recommendation-badge">★</div><div class="recommendation-content"><span class="skill-category">Развитие:</span> Углубление ключевых компетенций</div></li>';
+                echo '<li class="recommendation-item"><div class="recommendation-badge">★</div><div class="recommendation-content"><span class="skill-category">Проекты:</span> Участие в кросс-функциональных командах</div></li>';
+            } else {
+                echo '<li class="recommendation-item"><div class="recommendation-badge">★</div><div class="recommendation-content"><span class="skill-category">Основы:</span> Фокус на фундаментальных навыках</div></li>';
+                echo '<li class="recommendation-item"><div class="recommendation-badge">★</div><div class="recommendation-content"><span class="skill-category">Поддержка:</span> Работа с ментором или коучем</div></li>';
             }
-            
-            // Рекомендации на основе профиля
-            echo "<li class='mb-3'><strong>Ваш профиль:</strong><br>";
-            
-            if (!empty($strong_skills)) {
-                $top_skills = array_slice($strong_skills, 0, 3);
-                echo "Сильные стороны: " . implode(', ', array_keys($top_skills)) . ".<br>";
-            }
-            
-            if (!empty($weak_skills)) {
-                $critical_skills = array_slice($weak_skills, 0, 3);
-                echo "Зоны роста: " . implode(', ', array_keys($critical_skills)) . ".";
-            }
-            echo "</li>";
-            
-            // Специфические рекомендации
-            $specific_recommendations = [];
-            
-            // Рекомендации по коммуникации
-            if ($detailed_soft_skills['communication_skills'] <= 3) {
-                $specific_recommendations[] = "<strong>Коммуникация:</strong> Практикуйте pitch-презентации (30 сек о себе). Начните с ежедневных коротких высказываний в группах.";
-            }
-            
-            // Рекомендации по командной работе
-            if ($detailed_soft_skills['teamwork'] <= 3) {
-                $specific_recommendations[] = "<strong>Командная работа:</strong> Возьмите роль координатора в следующем проекте. Начните с распределения простых задач.";
-            }
-            
-            // Рекомендации по решению проблем
-            if ($detailed_soft_skills['problem_solving'] <= 3) {
-                $specific_recommendations[] = "<strong>Решение проблем:</strong> Применяйте методику '5 Почему' для анализа рабочих задач. Документируйте процесс.";
-            }
-            
-            // Рекомендации по адаптивности
-            if ($detailed_soft_skills['adaptability'] <= 3) {
-                $specific_recommendations[] = "<strong>Адаптивность:</strong> Каждую неделю пробуйте новый инструмент/подход в работе. Ведите дневник изменений.";
-            }
-            
-            // Рекомендации по лидерству
-            if ($detailed_soft_skills['leadership'] <= 3) {
-                $specific_recommendations[] = "<strong>Лидерство:</strong> Возьмите менторинг над junior-специалистом. Начните с 1-часовых сессий раз в 2 недели.";
-            }
-            
-            // Рекомендации по тайм-менеджменту
-            if ($detailed_soft_skills['time_management'] <= 3) {
-                $specific_recommendations[] = "<strong>Тайм-менеджмент:</strong> Внедрите Pomodoro-технику (25/5). Используйте матрицу Эйзенхауэра для приоритизации.";
-            }
-            
-            // Рекомендации по эмоциональному интеллекту
-            if ($detailed_soft_skills['emotional_intelligence'] <= 3) {
-                $specific_recommendations[] = "<strong>Эмоциональный интеллект:</strong> Ведите дневник эмоций 2 недели. Анализируйте триггеры и реакции.";
-            }
-            
-            // Рекомендации по стресс-менеджменту
-            if ($detailed_soft_skills['stress_management'] <= 3) {
-                $specific_recommendations[] = "<strong>Управление стрессом:</strong> Внедрите 5-минутные дыхательные практики 3 раза в день. Техника 4-7-8.";
-            }
-            
-            // Если все хорошо
-            if (empty($specific_recommendations)) {
-                $specific_recommendations[] = "<strong>Отличные результаты!</strong> Сфокусируйтесь на развитии экспертизы в ваших сильных сторонах. Рассмотрите менторинг других.";
-            }
-            
-            // Вывод рекомендаций
-            foreach (array_slice($specific_recommendations, 0, 5) as $rec) {
-                echo "<li class='mb-2'>$rec</li>";
-            }
-            
-            // Конкретные шаги
-            echo "<li class='mb-3 mt-3'><strong>Конкретные шаги на ближайший месяц:</strong><br>";
-            
-            $monthly_steps = [];
-            if (count($weak_skills) > 0) {
-                $first_weak_skill = array_key_first($weak_skills);
-                $monthly_steps[] = "1. Сфокусироваться на развитии '$first_weak_skill' (15 минут в день)";
-            }
-            
-            if (count($strong_skills) > 0) {
-                $first_strong_skill = array_key_first($strong_skills);
-                $monthly_steps[] = "2. Углубить экспертизу в '$first_strong_skill' через менторинг";
-            }
-            
-            $monthly_steps[] = "3. Пройти мини-курс по эмоциональному интеллекту";
-            $monthly_steps[] = "4. Провести 2 рабочих встречи в роли фасилитатора";
-            $monthly_steps[] = "5. Составить карту профессионального развития";
-            
-            foreach ($monthly_steps as $step) {
-                echo "• $step<br>";
-            }
-            echo "</li>";
             ?>
         </ul>
+        
+        <div class="resources-grid">
+            <div class="resource-card">
+                <span class="resource-type">Курс</span>
+                <div class="resource-name">Эмоциональный интеллект</div>
+                <p class="resource-desc">Coursera, 4 недели, онлайн</p>
+            </div>
+            <div class="resource-card">
+                <span class="resource-type">Книга</span>
+                <div class="resource-name">7 навыков высокоэффективных людей</div>
+                <p class="resource-desc">Стивен Кови, практическое руководство</p>
+            </div>
+            <div class="resource-card">
+                <span class="resource-type">Сообщество</span>
+                <div class="resource-name">Product Tribe</div>
+                <p class="resource-desc">Практика Soft Skills в IT-среде</p>
+            </div>
+        </div>
     </div>
+</div>
 <?php endif; ?> </div>
                                 
                                 <div class="col-md-6">
@@ -448,6 +422,7 @@ function getOverallLevel($total_score) {
 
 
 <?php include(__DIR__ . '/tpl/footer.php'); ?>
+
 
 
 
