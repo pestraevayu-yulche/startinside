@@ -739,7 +739,7 @@ textarea.form-control {
   border-radius: 8px;
   transition: all 0.3s ease;
   font-size: 1rem;
-  font-weight: 800px;
+  font-weight: 700; /* или bold, 600, 800 (без px!) */
   height: 45px;
   display: inline-flex;
   align-items: center;
@@ -753,7 +753,7 @@ textarea.form-control {
 }
 
 .submit-btn:hover {
-  background: #590c9dad;
+  background: #590c9d; /* темнее при наведении */
   color: white;
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(89, 12, 157, 0.4);
