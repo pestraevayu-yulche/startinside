@@ -77,7 +77,7 @@ include(__DIR__ . '/tpl/header.php');
                             </div>
                             <input type="email" class="form-control" placeholder="Ваш email" required>
                             <textarea class="form-control" rows="5" placeholder="Ваше сообщение" required></textarea>
-                            <button type="submit" class="submit-btn">Отправить сообщение</button>
+                            <button type="submit" class="btn-progress">Отправить сообщение</button>
                         </form>
                     </div>
                 </div>
@@ -115,3 +115,4 @@ include(__DIR__ . '/tpl/header.php');
 include(__DIR__ . '/tpl/footer.php');
 
 ?>
+
