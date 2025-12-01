@@ -741,7 +741,10 @@ textarea.form-control {
   font-weight: 600;
   transition: all 0.3s ease;
   text-decoration: none;
-  display: inline-block;}
+  display: block;
+  margin: 25px auto 0 auto;
+  width: fit-content;
+  padding: 0.75rem 2.5rem;}
 
 /* Подвал */
 footer {
