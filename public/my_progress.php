@@ -4,91 +4,80 @@ if (empty($_SESSION['login']) or empty($_SESSION['id'])) {
     header("Location: avtor.php");
     exit();
 }
-
 include("dbconnect.php");
-$user_id = $_SESSION['id'];
 
 // Получаем данные пользователя
+$user_id = $_SESSION['id'];
+$user_data = array();
+$profile_data = array();
+
 try {
+    // Основные данные пользователя
     $stmt = $pdo->prepare("SELECT * FROM users WHERE id = :user_id");
     $stmt->bindParam(':user_id', $user_id);
     $stmt->execute();
     $user_data = $stmt->fetch();
-} catch (PDOException $e) {
-    error_log("Error fetching user: " . $e->getMessage());
-    $user_data = [];
-}
-
-// Получаем профиль пользователя
-try {
+    
+    // Данные профиля
     $stmt = $pdo->prepare("SELECT * FROM user_profiles WHERE user_id = :user_id");
     $stmt->bindParam(':user_id', $user_id);
     $stmt->execute();
-    $profile_data = $stmt->fetch() ?: [];
+    
+    if ($stmt->rowCount() > 0) {
+        $profile_data = $stmt->fetch();
+    }
 } catch (PDOException $e) {
-    error_log("Error fetching profile: " . $e->getMessage());
-    $profile_data = [];
+    error_log("Error fetching user data: " . $e->getMessage());
 }
 
-// Получаем результаты Soft Skills тестов из новой таблицы
+// Получаем расширенные результаты soft skills теста
+$detailed_soft_skills = array();
 try {
-    $stmt = $pdo->prepare("SELECT * FROM soft_skills_detailed_results WHERE user_id = :user_id ORDER BY test_date DESC LIMIT 5");
+    $stmt = $pdo->prepare("SELECT * FROM soft_skills_detailed_results WHERE user_id = :user_id ORDER BY test_date DESC LIMIT 1");
     $stmt->bindParam(':user_id', $user_id);
     $stmt->execute();
-    $softskills_results = $stmt->fetchAll();
+    
+    if ($stmt->rowCount() > 0) {
+        $detailed_soft_skills = $stmt->fetch();
+    }
 } catch (PDOException $e) {
-    error_log("Error fetching softskills: " . $e->getMessage());
-    $softskills_results = [];
+    error_log("Error fetching detailed soft skills results: " . $e->getMessage());
 }
 
 // Получаем результаты технических тестов
+$technical_results = array();
 try {
-    $stmt = $pdo->prepare("
-        SELECT tr.*, d.name as direction_name 
-        FROM technical_results tr 
-        LEFT JOIN directions d ON tr.direction_id = d.id 
-        WHERE tr.user_id = :user_id 
-        ORDER BY tr.test_date DESC 
-        LIMIT 10
-    ");
+    $stmt = $pdo->prepare("SELECT tr.*, d.name as direction_name 
+                          FROM test_results tr 
+                          LEFT JOIN directions d ON tr.direction_id = d.id 
+                          WHERE tr.user_id = :user_id 
+                          ORDER BY tr.test_date DESC");
     $stmt->bindParam(':user_id', $user_id);
     $stmt->execute();
-    $technical_results = $stmt->fetchAll();
+    
+    if ($stmt->rowCount() > 0) {
+        $technical_results = $stmt->fetchAll();
+    }
 } catch (PDOException $e) {
     error_log("Error fetching technical results: " . $e->getMessage());
-    $technical_results = [];
 }
 
-// Получаем цели развития
-try {
-    $stmt = $pdo->prepare("SELECT * FROM development_goals WHERE user_id = :user_id ORDER BY created_at DESC");
-    $stmt->bindParam(':user_id', $user_id);
-    $stmt->execute();
-    $goals = $stmt->fetchAll();
-} catch (PDOException $e) {
-    error_log("Error fetching goals: " . $e->getMessage());
-    $goals = [];
+// Функция для получения уровня навыка
+function getSkillLevel($score) {
+    if ($score >= 4.5) return ['level' => 'Эксперт', 'color' => '#10b981'];
+    if ($score >= 3.5) return ['level' => 'Продвинутый', 'color' => '#3b82f6'];
+    if ($score >= 2.5) return ['level' => 'Средний', 'color' => '#f59e0b'];
+    if ($score >= 1.5) return ['level' => 'Начинающий', 'color' => '#ef4444'];
+    return ['level' => 'Новичок', 'color' => '#6b7280'];
 }
 
-// Статистика
-$total_tests = count($softskills_results) + count($technical_results);
-$avg_score = 0;
-
-if ($total_tests > 0) {
-    $total_score = 0;
-    $total_max_score = 0;
-    
-    foreach ($softskills_results as $test) {
-    $total_score += $test['total_score'];
-    $total_max_score += 80; // максимальный балл за Soft Skills тест
-    }
-    
-    foreach ($technical_results as $test) {
-        $total_score += $test['score'];
-        $total_max_score += $test['max_score'];
-    }
-    
-    $avg_score = $total_max_score > 0 ? round(($total_score / $total_max_score) * 100, 1) : 0;
+// Функция для получения общего уровня
+function getOverallLevel($total_score) {
+    if ($total_score >= 90) return 'Эксперт';
+    if ($total_score >= 70) return 'Продвинутый';
+    if ($total_score >= 50) return 'Средний';
+    if ($total_score >= 30) return 'Начинающий';
+    return 'Низкий уровень. Критическая зона для развития.';
 }
 ?>
 
@@ -102,7 +91,7 @@ if ($total_tests > 0) {
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <?php include(__DIR__ . '/tpl/header.php'); ?>
+    <?php include('tpl/header.php'); ?>
     
     <!-- Фоновая картинка -->
     <div class="background-container">
@@ -110,7 +99,7 @@ if ($total_tests > 0) {
         <div class="overlay"></div>
     </div>
     
-    <?php include(__DIR__ . '/tpl/nav.php'); ?>
+    <?php include('tpl/nav.php'); ?>
 
     <div class="hero-section progress-page">
     <div class="progress-page-container">
@@ -147,85 +136,79 @@ if ($total_tests > 0) {
                 </div>
             </div>
 
-                        <!-- История тестов -->
+            <!-- Soft Skills результаты -->
             <div class="progress-section-card">
-                <h3 class="section-title-progress">История тестирования</h3>
+                <h3 class="section-title-progress">Результаты теста Soft Skills</h3>
                 
-<!-- Soft Skills результаты -->
-<?php if (!empty($softskills_results)): ?>
-    <h4>Soft Skills тесты</h4>
-    <?php foreach($softskills_results as $test): ?>
-        <div class="test-item">
-            <div class="test-header">
-                <h5>Soft Skills Assessment</h5>
-                <span class="test-date">
-                    <?php echo date('d.m.Y H:i', strtotime($test['test_date'])); ?>
-                </span>
-            </div>
-            <div class="test-result">
-                <div class="score">
-                    <span class="score-value"><?php echo $test['total_score']; ?>/80</span>
-                    <span class="score-label">общий балл</span>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: <?php echo ($test['total_score'] / 80) * 100; ?>%"></div>
-                </div>
-            </div>
-            <div class="skill-breakdown">
-                <div class="skill-score">Коммуникация: <?php echo $test['communication_skills']; ?>/5</div>
-                <div class="skill-score">Активное слушание: <?php echo $test['active_listening']; ?>/5</div>
-                <div class="skill-score">Командная работа: <?php echo $test['teamwork']; ?>/5</div>
-                <div class="skill-score">Коллаборация: <?php echo $test['collaboration']; ?>/5</div>
-                <div class="skill-score">Решение проблем: <?php echo $test['problem_solving']; ?>/5</div>
-                <div class="skill-score">Принятие решений: <?php echo $test['decision_making']; ?>/5</div>
-                <div class="skill-score">Адаптивность: <?php echo $test['adaptability']; ?>/5</div>
-                <div class="skill-score">Обучаемость: <?php echo $test['learning_agility']; ?>/5</div>
-                <div class="skill-score">Лидерство: <?php echo $test['leadership']; ?>/5</div>
-                <div class="skill-score">Обратная связь: <?php echo $test['feedback_skills']; ?>/5</div>
-                <div class="skill-score">Тайм-менеджмент: <?php echo $test['time_management']; ?>/5</div>
-                <div class="skill-score">Стратегическое мышление: <?php echo $test['strategic_thinking']; ?>/5</div>
-                <div class="skill-score">Креативность: <?php echo $test['creativity']; ?>/5</div>
-                <div class="skill-score">Решение конфликтов: <?php echo $test['conflict_resolution']; ?>/5</div>
-                <div class="skill-score">Эмоциональный интеллект: <?php echo $test['emotional_intelligence']; ?>/5</div>
-                <div class="skill-score">Управление стрессом: <?php echo $test['stress_management']; ?>/5</div>
-            </div>
-        </div>
-    <?php endforeach; ?>
-<?php endif; ?>
-                <!-- Технические тесты -->
-                <?php if (!empty($technical_results)): ?>
-                    <h4>Технические тесты</h4>
-                    <?php foreach($technical_results as $test): ?>
-                        <div class="test-item">
-                            <div class="test-header">
-                                <h5><?php echo htmlspecialchars($test['test_name']); ?> (<?php echo htmlspecialchars($test['direction_name']); ?>)</h5>
-                                <span class="test-date">
-                                    <?php echo date('d.m.Y H:i', strtotime($test['test_date'])); ?>
-                                </span>
-                            </div>
-                            <div class="test-result">
-                                <div class="score">
-                                    <span class="score-value"><?php echo $test['score']; ?>/<?php echo $test['max_score']; ?></span>
-                                    <span class="score-label">баллов</span>
+                <?php if (!empty($detailed_soft_skills)): ?>
+                    <div class="skills-grid-progress">
+                        <!-- Левая колонка -->
+                        <div class="skills-column-progress">
+                            <?php
+                            $left_skills = [
+                                'communication_skills' => ['title' => 'Коммуникативные навыки', 'detail' => 'active_listening', 'detail_title' => 'Активное слушание'],
+                                'teamwork' => ['title' => 'Командная работа', 'detail' => 'collaboration', 'detail_title' => 'Коллаборация'],
+                                'problem_solving' => ['title' => 'Решение проблем', 'detail' => 'decision_making', 'detail_title' => 'Принятие решений'],
+                                'adaptability' => ['title' => 'Адаптивность', 'detail' => 'learning_agility', 'detail_title' => 'Обучаемость']
+                            ];
+                            
+                            foreach($left_skills as $skill => $data): 
+                                $score = $detailed_soft_skills[$skill];
+                                $detail_score = $detailed_soft_skills[$data['detail']];
+                            ?>
+                            <div class="skill-item-progress">
+                                <h5 class="skill-title-progress"><?php echo $data['title']; ?></h5>
+                                <div class="progress-container-progress">
+                                    <div class="progress-bar-progress" style="width: <?php echo ($score / 5) * 100; ?>%">
+                                        <?php echo $score; ?>/5
+                                    </div>
                                 </div>
-                                <div class="progress-bar">
-                                    <div class="progress-fill" style="width: <?php echo $test['max_score'] > 0 ? round(($test['score'] / $test['max_score']) * 100) : 0; ?>%"></div>
+                                <div class="skill-details-progress">
+                                    <?php echo $data['detail_title']; ?>: <?php echo $detail_score; ?>/5
                                 </div>
                             </div>
-                            <div class="test-interpretation">
-                                Уровень: <strong><?php echo htmlspecialchars($test['level']); ?></strong> | 
-                                Правильных ответов: <?php echo $test['correct_answers']; ?>/<?php echo $test['total_questions']; ?>
-                            </div>
+                            <?php endforeach; ?>
                         </div>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-
-                <?php if (empty($softskills_results) && empty($technical_results)): ?>
+                        
+                        <!-- Правая колонка -->
+                        <div class="skills-column-progress">
+                            <?php
+                            $right_skills = [
+                                'leadership' => ['title' => 'Лидерство', 'detail' => 'feedback_skills', 'detail_title' => 'Обратная связь'],
+                                'time_management' => ['title' => 'Тайм-менеджмент', 'detail' => 'strategic_thinking', 'detail_title' => 'Стратегическое мышление'],
+                                'creativity' => ['title' => 'Креативность', 'detail' => 'conflict_resolution', 'detail_title' => 'Решение конфликтов'],
+                                'emotional_intelligence' => ['title' => 'Эмоциональный интеллект', 'detail' => 'stress_management', 'detail_title' => 'Управление стрессом']
+                            ];
+                            
+                            foreach($right_skills as $skill => $data): 
+                                $score = $detailed_soft_skills[$skill];
+                                $detail_score = $detailed_soft_skills[$data['detail']];
+                            ?>
+                            <div class="skill-item-progress">
+                                <h5 class="skill-title-progress"><?php echo $data['title']; ?></h5>
+                                <div class="progress-container-progress">
+                                    <div class="progress-bar-progress" style="width: <?php echo ($score / 5) * 100; ?>%">
+                                        <?php echo $score; ?>/5
+                                    </div>
+                                </div>
+                                <div class="skill-details-progress">
+                                    <?php echo $data['detail_title']; ?>: <?php echo $detail_score; ?>/5
+                                </div>
+                            </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                    
+                    <div class="total-score-progress">
+                        <h4>Общий балл: <?php echo $detailed_soft_skills['total_score']; ?>/80</h4>
+                        <p class="text-muted mb-3">Тест пройден: <?php echo date('d.m.Y H:i', strtotime($detailed_soft_skills['test_date'])); ?></p>
+                        <a href="soft_skills_test.php" class="btn-progress">Пройти тест заново</a>
+                    </div>
+                    
+                <?php else: ?>
                     <div class="empty-state-progress">
-                        <p>Пока нет результатов тестов</p>
-                        <p>Пройдите тесты, чтобы отслеживать ваш прогресс</p>
-                        <a href="soft_skills_test.php" class="btn-progress me-2">Soft Skills тест</a>
-                        <a href="directions.php" class="btn-progress">Технические тесты</a>
+                        <p>Вы еще не проходили тест Soft Skills</p>
+                        <a href="soft_skills_test.php" class="btn-progress">Пройти тестирование</a>
                     </div>
                 <?php endif; ?>
             </div>
@@ -354,6 +337,7 @@ if ($total_tests > 0) {
 
 
 <?php include(__DIR__ . '/tpl/footer.php'); ?>
+
 
 
 
