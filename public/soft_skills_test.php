@@ -136,14 +136,14 @@ try {
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <?php include(__DIR__ . '/tpl/header.php'); ?>
+    <?php include('tpl/header.php'); ?>
     
     <div class="background-container">
         <img src="img/programs.jpg" alt="Фон" class="background-image">
         <div class="overlay"></div>
     </div>
     
-    <?php include(__DIR__ . '/tpl/nav.php'); ?>
+    <?php include('tpl/nav.php'); ?>
 
     <div class="hero-section">
         <div class="test-container">
@@ -501,3 +501,4 @@ try {
 </body>
 
 </html>
+
