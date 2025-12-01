@@ -1236,35 +1236,12 @@ footer p {
 }
 
 .skill-category {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 15px;
   padding: 25px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
   position: relative;
   overflow: hidden;
   transition: all 0.3s ease;
 }
 
-.skill-category::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #fe895b, #e45eeec5);
-  transform: scaleX(0);
-  transition: transform 0.3s ease;
-}
-
-.skill-category:hover::before {
-  transform: scaleX(1);
-}
-
-.skill-category:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-}
 
 .category-header {
   display: flex;
@@ -1616,10 +1593,7 @@ footer p {
   gap: 10px;
 }
 
-.steps-title::before {
-  content: "📋";
-  font-size: 1.2rem;
-}
+
 
 .steps-list {
   list-style: none;
@@ -1675,17 +1649,17 @@ footer p {
 
 .level-beginner {
   background: rgba(255, 152, 0, 0.2);
-  color: #FF9800;
+  color: #ffffff;
 }
 
 .level-intermediate {
-  background: rgba(33, 150, 243, 0.2);
-  color: #2196F3;
+  background: #590c9dad;
+  color: #ffffff;
 }
 
 .level-advanced {
   background: rgba(76, 175, 80, 0.2);
-  color: #4CAF50;
+  color: #ffffff;
 }
 
 /* Ресурсы */
