@@ -305,15 +305,13 @@ function getOverallLevel($total_score) {
         }
     ?>
         <div class="profile-section">
-            <span class="profile-label">Сильные стороны:</span>
-            <span class="profile-value strong-skills">
+            <span class="profile-label">Сильные стороны:
                 <?php echo implode(', ', array_keys($strong_skills)); ?>
             </span>
         </div>
         
         <div class="profile-section">
-            <span class="profile-label">Зоны роста:</span>
-            <span class="profile-value weak-skills">
+            <span class="profile-label">Зоны роста:
                 <?php echo implode(', ', array_keys($weak_skills)); ?>
             </span>
         </div>
@@ -427,6 +425,7 @@ function getOverallLevel($total_score) {
 
 
 <?php include(__DIR__ . '/tpl/footer.php'); ?>
+
 
 
 
