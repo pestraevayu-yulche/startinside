@@ -739,7 +739,7 @@ textarea.form-control {
   border-radius: 8px;
   transition: all 0.3s ease;
   font-size: 1rem;
-  font-weight: 700; /* или bold, 600, 800 (без px!) */
+  font-weight: bold;
   height: 45px;
   display: inline-flex;
   align-items: center;
