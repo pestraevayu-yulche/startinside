@@ -734,30 +734,14 @@ textarea.form-control {
 
 .submit-btn {
   background: #590c9dad;
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  font-size: 1rem;
-  font-weight: bold;
-  height: 45px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  max-width: 300px;
-  margin: 0 auto;
   border: none;
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.submit-btn:hover {
-  background: #590c9d; /* темнее при наведении */
   color: white;
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(89, 12, 157, 0.4);
-}
+  padding: 10px 25px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;}
 
 /* Подвал */
 footer {
